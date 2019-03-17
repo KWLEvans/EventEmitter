@@ -1,0 +1,14 @@
+{
+  "name": "eventemitter",
+  "version": "1.0.0",
+  "description": "A custom event emitter for the Urban Airship coding challenge",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Keith Evans",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^24.5.0"
+  }
+}
