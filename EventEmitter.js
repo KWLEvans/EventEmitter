@@ -30,22 +30,12 @@ class EventEmitter {
 
   };
 
-  unregisterAll(event) {
+  unregisterAll(event = null) {
 
   };
 
-  getHandlers(eventName = null) {
-    if (eventName) {
-      return this.events[eventName];
-    }
-    
-    const handlers = [];
-
-    for (eventArray in this.events) {
-      handlers = [...handlers, ...eventArray];
-    }
-    
-    return handlers;
+  getHandlers(eventName) {
+    return this.events[eventName];
   }
 };
 
