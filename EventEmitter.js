@@ -27,11 +27,19 @@ class EventEmitter {
 
   // Removing specific previously-registered event handlers and/or all previously-registered event handlers.
   unregister(event, handler) {
+    this.events[event] = this.events[event].filter(e => e.handler !== handler);
 
+    if (this.events[event] === []) {
+      delete this.events[event];
+    }
+
+    return this;
   };
 
   unregisterAll(event = null) {
+    delete this.events[event];
 
+    return this;
   };
 
   getHandlers(eventName) {
