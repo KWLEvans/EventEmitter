@@ -24,6 +24,12 @@ test('Can register an event handler', () => {
   expect(this.emitter.getHandlers(this.event)[0].handler).toEqual(this.handler);
 });
 
+test('Cannot register non-function as event handler', () => {
+  expect(() => { 
+    this.emitter.register(this.event, this.event2);
+  }).toThrow('Event handler must be a function');
+});
+
 test('Can chain handler registration', () => {
   this.emitter.register(this.event, this.handler).register(this.event2, this.handler2);
 

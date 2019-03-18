@@ -9,7 +9,7 @@ class EventEmitter {
     if (!this.events[event]) {
       return false;
     }
-    
+
     const events = this.events[event];
 
     for (let i = 0; i < events.length; i++) {
@@ -24,6 +24,10 @@ class EventEmitter {
 
   // Registering handler functions for named events that are passed the appropriate arguments on emission.
   register(event, handler, once = false) {
+    if (typeof handler !== "function") {
+      throw "Event handler must be a function";
+    }
+
     if (!this.events[event]) {
       this.events[event] = [];
     }
