@@ -2,6 +2,14 @@
 
 ##Methods
 
+####emit(_eventName_[, ...args])
+The `emit()` method runs all handlers registered to the given `eventName`, passing them any and all `args`
+  * **Arguments**
+    * `eventName: (String)` is the name of the event to emit
+    * `...args: (Any)` are any number of arguments passed in
+  * **Return Type**
+    * A `Boolean` that is `true` if there were handlers called and `false` otherwise
+
 ####getHandlers(_eventName_)
 The `getHandlers()` method gets all bound handlers for a given event
   * **Arguments**
@@ -19,7 +27,7 @@ The `once()` method binds a handler that is run at most one time
   * **Return Type**
     * The `EventEmitter` instance is returned to allow for chaining.
 
-####register(_eventName_, _handler_, _once_ = false)
+####register(_eventName_, _handler_[, _once_ = false])
   The `register()` method binds a handler to be run when an event is `emit`ted
   * **Arguments**
     * `eventName: (String)` is the name of the event to which to bind your handler
@@ -36,7 +44,7 @@ The `once()` method binds a handler that is run at most one time
   * **Return Type**
     * The `EventEmitter` instance is returned to allow for chaining.
     
-####unregisterAll(_eventName_ = null)
+####unregisterAll([_eventName_ = null])
   The `unregisterAll()` method unbinds all handlers from a given event. If no `eventName` argument is passed, it unbinds all handlers from all events
   * **Arguments**
     * `eventName: (String)` is the name of the event from which to unbind all handlers

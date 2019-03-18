@@ -5,8 +5,21 @@ class EventEmitter {
   }
 
   // Emitting named events with any number of arguments.
-  emit(event, data = {}) {
+  emit(event, ...args) {
+    if (!this.events[event]) {
+      return false;
+    }
+    
+    const events = this.events[event];
 
+    for (let i = 0; i < events.length; i++) {
+      events[i].handler(...args);
+      if (events[i].once) {
+        this.unregister(event, events[i].handler);
+      }
+    }
+
+    return true;
   };
 
   // Registering handler functions for named events that are passed the appropriate arguments on emission.

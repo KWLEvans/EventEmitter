@@ -2,13 +2,15 @@ const EventEmitter = require('./EventEmitter');
 
 beforeAll(() => {
   this.event = 'test';
-  this.handler = new Function();
   this.event2 = 'test2';
-  this.handler2 = new Function();
+  this.argument = 'argument';
+  this.argument2 = 'argument2';
 })
 
 beforeEach(() => {
   this.emitter = new EventEmitter;
+  this.handler = jest.fn();
+  this.handler2 = jest.fn();
 });
 
 
@@ -56,5 +58,63 @@ test('Can unregister() all event handlers', () => {
 
   this.emitter.unregisterAll(this.event);
 
-  expect(this.emitter.getHandlers(this.event)).toBeUndefined;
-})
+  expect(this.emitter.getHandlers(this.event)).toBeUndefined();
+});
+
+test('Can receive false for emitting event with no handlers', () => {
+  expect(this.emitter.emit(this.event)).toBe(false);
+});
+
+test('Can receive true for emitting event with handlers', () => {
+  this.emitter.register(this.event, this.handler);
+
+  expect(this.emitter.emit(this.event)).toBe(true);
+});
+
+test('Can emit() single event with no arguments', () => {
+  this.emitter.register(this.event, this.handler);
+
+  this.emitter.emit(this.event);
+
+  expect(this.handler).toHaveBeenCalled();
+});
+
+test('Can emit() a single handler multiple times', () => {
+  this.emitter.register(this.event, this.handler);
+
+  this.emitter.emit(this.event);
+  this.emitter.emit(this.event);
+  this.emitter.emit(this.event);
+
+  expect(this.handler).toHaveBeenCalledTimes(3);
+});
+
+test('Can emit() a single handler with multiple arguments', () => {
+  this.emitter.register(this.event, this.handler);
+
+  this.emitter.emit(this.event, this.argument, this.argument2);
+
+  expect(this.handler).toHaveBeenCalledWith(this.argument, this.argument2);
+});
+
+test('Can emit() multiple handlers with multiple arguments', () => {
+  this.emitter.register(this.event, this.handler);
+  this.emitter.register(this.event, this.handler2);
+
+  this.emitter.emit(this.event, this.argument, this.argument2);
+
+  expect(this.handler).toHaveBeenCalledWith(this.argument, this.argument2);
+  expect(this.handler2).toHaveBeenCalledWith(this.argument, this.argument2);
+});
+
+test('Can run once events only one time with multiple emit()s', () => {
+  this.emitter.register(this.event, this.handler);
+  this.emitter.once(this.event, this.handler2);
+
+  this.emitter.emit(this.event);
+  this.emitter.emit(this.event);
+  this.emitter.emit(this.event);
+
+  expect(this.handler).toHaveBeenCalledTimes(3);
+  expect(this.handler2).toHaveBeenCalledTimes(1);
+});
