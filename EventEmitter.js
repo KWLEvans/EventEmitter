@@ -4,8 +4,9 @@ class EventEmitter {
     this.events = {};
   }
 
-  // Emitting named events with any number of arguments.
   emit(event, ...args) {
+    this.validate(event, 'string');
+
     if (!this.events[event]) {
       return false;
     }
@@ -22,11 +23,10 @@ class EventEmitter {
     return true;
   };
 
-  // Registering handler functions for named events that are passed the appropriate arguments on emission.
   register(event, handler, once = false) {
-    if (typeof handler !== "function") {
-      throw "Event handler must be a function";
-    }
+    this.validate(event, 'string');
+    this.validate(handler, 'function');
+    this.validate(once, 'boolean');
 
     if (!this.events[event]) {
       this.events[event] = [];
@@ -37,13 +37,14 @@ class EventEmitter {
     return this;
   };
 
-  // Registering a "one-time" handler that will be called at most one time.
   once(event, handler) {
     return this.register(event, handler, true);
   };
 
-  // Removing specific previously-registered event handlers and/or all previously-registered event handlers.
   unregister(event, handler) {
+    this.validate(event, 'string');
+    this.validate(handler, 'function');
+
     this.events[event] = this.events[event].filter(e => e.handler !== handler);
 
     if (this.events[event] === []) {
@@ -53,14 +54,29 @@ class EventEmitter {
     return this;
   };
 
-  unregisterAll(event = null) {
-    delete this.events[event];
+  unregisterAll(event = '') {
+    this.validate(event, 'string');
+
+    if (event === '') {
+      this.events = {};
+    } else {
+      delete this.events[event];
+    }
 
     return this;
   };
 
-  getHandlers(eventName) {
-    return this.events[eventName];
+  getHandlers(event) {
+    this.validate(event, 'string');
+
+    return this.events[event];
+  }
+
+  // A type validation function would be unnecessary in TypeScript
+  validate(arg, type) {
+    if (typeof arg !== type) {
+      throw new TypeError(`Event handler must be a ${type}`);
+    }
   }
 };
 

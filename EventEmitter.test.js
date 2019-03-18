@@ -18,16 +18,20 @@ test('Can instantiate EventEmitter', () => {
   expect(this.emitter).toBeInstanceOf(EventEmitter);
 });
 
+test('Can throw TypeError for incorrect input types', () => {
+  expect(() => { 
+    this.emitter.register(this.event, this.event2);
+  }).toThrow(TypeError);
+
+  expect(() => { 
+    this.emitter.register(this.handler, this.handler2);
+  }).toThrow(TypeError);
+});
+
 test('Can register an event handler', () => {
   this.emitter.register(this.event, this.handler);
 
   expect(this.emitter.getHandlers(this.event)[0].handler).toEqual(this.handler);
-});
-
-test('Cannot register non-function as event handler', () => {
-  expect(() => { 
-    this.emitter.register(this.event, this.event2);
-  }).toThrow('Event handler must be a function');
 });
 
 test('Can chain handler registration', () => {
@@ -58,13 +62,24 @@ test('Can unregister() an event handler', () => {
   expect(this.emitter.getHandlers(this.event)[0].handler).toEqual(this.handler);
 });
 
-test('Can unregisterAll() event handlers', () => {
+test('Can unregisterAll() event handlers from an event', () => {
   this.emitter.register(this.event, this.handler);
   this.emitter.register(this.event, this.handler2);
 
   this.emitter.unregisterAll(this.event);
 
   expect(this.emitter.getHandlers(this.event)).toBeUndefined();
+});
+
+test('Can unregisterAll() event handlers from all events', () => {
+  this.emitter.register(this.event, this.handler);
+  this.emitter.register(this.event, this.handler2);
+  this.emitter.register(this.event2, this.handler);
+  this.emitter.register(this.event2, this.handler2);
+
+  this.emitter.unregisterAll();
+
+  expect(this.emitter.events).toMatchObject({});
 });
 
 test('Can receive false for emitting event with no handlers', () => {
