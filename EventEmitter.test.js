@@ -58,7 +58,7 @@ test('Can unregister() an event handler', () => {
   expect(this.emitter.getHandlers(this.event)[0].handler).toEqual(this.handler);
 });
 
-test('Can unregister() all event handlers', () => {
+test('Can unregisterAll() event handlers', () => {
   this.emitter.register(this.event, this.handler);
   this.emitter.register(this.event, this.handler2);
 
@@ -77,7 +77,7 @@ test('Can receive true for emitting event with handlers', () => {
   expect(this.emitter.emit(this.event)).toBe(true);
 });
 
-test('Can emit() single event with no arguments', () => {
+test('Can emit() single event', () => {
   this.emitter.register(this.event, this.handler);
 
   this.emitter.emit(this.event);
@@ -85,7 +85,7 @@ test('Can emit() single event with no arguments', () => {
   expect(this.handler).toHaveBeenCalled();
 });
 
-test('Can emit() a single handler multiple times', () => {
+test('Can emit() a single event multiple times', () => {
   this.emitter.register(this.event, this.handler);
 
   this.emitter.emit(this.event);
@@ -95,7 +95,7 @@ test('Can emit() a single handler multiple times', () => {
   expect(this.handler).toHaveBeenCalledTimes(3);
 });
 
-test('Can emit() a single handler with multiple arguments', () => {
+test('Can pass all arguments to an emitted event handler', () => {
   this.emitter.register(this.event, this.handler);
 
   this.emitter.emit(this.event, this.argument, this.argument2);
@@ -103,7 +103,7 @@ test('Can emit() a single handler with multiple arguments', () => {
   expect(this.handler).toHaveBeenCalledWith(this.argument, this.argument2);
 });
 
-test('Can emit() multiple handlers with multiple arguments', () => {
+test('Can pass all arguments to all emitted event handlers', () => {
   this.emitter.register(this.event, this.handler);
   this.emitter.register(this.event, this.handler2);
 

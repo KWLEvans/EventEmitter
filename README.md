@@ -1,4 +1,5 @@
 #EventEmitter
+This is a custom EventEmitter class. It allows you to `register` handler functions to be called when certain events are `emit`ted. Mutltiple handlers can be bound to any given event and they are called synchronously in the order they were bound. Events that should only fire once can be bound using the `once()` method, and handlers can be `unregister`ed manually.
 
 ##Methods
 
@@ -50,3 +51,9 @@ The `once()` method binds a handler that is run at most one time
     * `eventName: (String)` is the name of the event from which to unbind all handlers
   * **Return Type**
     * The `EventEmitter` instance is returned to allow for chaining.
+
+## License
+
+[MIT](http://opensource.org/licenses/MIT)
+
+Copyright (c) 2019-present, Keith Evans
